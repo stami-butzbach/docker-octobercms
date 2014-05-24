@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ ! -f /usr/share/nginx/html/app/storage/temp/ ]; then
+if [ ! -d /usr/share/nginx/html/app/storage/temp/ ]; then
   
   mkdir /usr/share/nginx/html/app/storage/temp/
   chown -R www-data:www-data /usr/share/nginx/html/app/storage/temp/
@@ -23,7 +23,7 @@ if [ ! -f /usr/share/nginx/html/app/storage/temp/ ]; then
   mv /usr/share/nginx/html/app/config/app.php.temp /usr/share/nginx/html/app/config/app.php
 
   sed -e "s/=> 'database'/=> '$OCTOBER_DB'/;s/=> 'root'/=> 'october'/;s/'password' => ''/'password' => '$OCTOBER_PASSWORD'/" /usr/share/nginx/html/app/config/database.php > /usr/share/nginx/html/app/config/database.php.temp
-  mv /usr/share/nginx/html/app/config/database.php.temp /usr/share/nginx/html/app/config/datbase.php
+  mv /usr/share/nginx/html/app/config/database.php.temp /usr/share/nginx/html/app/config/database.php
 
   mysqladmin -u root password $MYSQL_PASSWORD
   mysql -uroot -p$MYSQL_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'october'@'%' IDENTIFIED BY '$OCTOBER_PASSWORD' WITH GRANT OPTION; FLUSH PRIVILEGES;"
