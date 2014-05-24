@@ -12,6 +12,7 @@ RUN mkdir /var/run/sshd
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
+RUN cat /proc/mounts > /etc/mtab
 RUN apt-get -y upgrade
 
 # Basic Requirements
