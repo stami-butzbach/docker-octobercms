@@ -27,7 +27,7 @@ if [ ! -d /usr/share/nginx/html/app/storage/temp/ ]; then
 
   mysqladmin -u root password $MYSQL_PASSWORD
   mysql -uroot -p$MYSQL_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'october'@'%' IDENTIFIED BY '$OCTOBER_PASSWORD' WITH GRANT OPTION; FLUSH PRIVILEGES;"
-  mysql -uroot -p$MYSQL_PASSWORD -e "CREATE DATABASE '$OCTOBER_DB'; GRANT ALL PRIVILEGES ON '$OCTOBER_DB'.* TO 'october'@'localhost' IDENTIFIED BY '$OCTOBER_PASSWORD'; FLUSH PRIVILEGES;"
+  mysql -uroot -p$MYSQL_PASSWORD -e "CREATE DATABASE "$OCTOBER_DB"; GRANT ALL PRIVILEGES ON "$OCTOBER_DB".* TO 'october'@'localhost' IDENTIFIED BY '$OCTOBER_PASSWORD'; FLUSH PRIVILEGES;"
 
   cd /usr/share/nginx/html/ && php artisan october:up
 
