@@ -22,7 +22,7 @@ if [ ! -d /usr/share/nginx/html/app/storage/temp/ ]; then
   sed -e 's/CHANGE_ME!!!/'`pwgen -c -n -1 32`'/' /usr/share/nginx/html/app/config/app.php > /usr/share/nginx/html/app/config/app.php.temp
   mv /usr/share/nginx/html/app/config/app.php.temp /usr/share/nginx/html/app/config/app.php
 
-  sed -e "s/=> 'database'/=> '$OCTOBER_DB'/;s/=> 'root'/=> 'october'/;s/'password' => ''/'password' => '$OCTOBER_PASSWORD'/" /usr/share/nginx/html/app/config/database.php > /usr/share/nginx/html/app/config/database.php.temp
+  sed -e "s/=> 'database'/=> '$OCTOBER_DB'/;s/=> 'root'/=> 'october'/;s/'password'\s\s=>\s''/'password' => '$OCTOBER_PASSWORD'/" /usr/share/nginx/html/app/config/database.php > /usr/share/nginx/html/app/config/database.php.temp
   mv /usr/share/nginx/html/app/config/database.php.temp /usr/share/nginx/html/app/config/database.php
 
   mysqladmin -u root password $MYSQL_PASSWORD
