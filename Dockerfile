@@ -22,6 +22,9 @@ RUN apt-get -y install mysql-server mysql-client nginx php5-fpm php5-mysql php-a
 RUN apt-get -y install php5-curl php5-gd php5-mcrypt php5-memcache php5-memcached php5-sqlite php5-json libphp-pclzip
 
 # Add october user for ssh access
+RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+RUN sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config
+RUN sed -ri 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
 RUN useradd -m -d /home/october -p $(openssl passwd -1 'temp') -G sudo -s /bin/bash october 
 RUN echo "october ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
