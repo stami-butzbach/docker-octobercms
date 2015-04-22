@@ -1,0 +1,16 @@
+# Docker Compose file for OctoberCMS for StamiDevelopment
+
+# Build with:
+# docker-compose build elk
+
+# Run with:
+# docker-compose up
+
+stamibeta:
+  build: .
+  ports:
+    - "80:80"
+    - "3306:3306"
+    - "2234:22" # SSH Port in boot2dokcer already used
+  volumes:
+    - /var/www

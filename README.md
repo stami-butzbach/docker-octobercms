@@ -1,15 +1,23 @@
-# docker-octobercms-nginx-ssh
+# docker-octobercms based on debian
 
-A Dockerfile that installs the latest [octobercms](https://github.com/octobercms/october), nginx, mysql, ssh, php-apc and php-fpm.
+A Dockerfile that installs the latest [octobercms](https://github.com/octobercms/october), nginx, mysql, ssh, php-apc and php-fpm on a debian installation.
 
-This is a forked version from [eugeneware](https://github.com/eugeneware/docker-wordpress-nginx). All credits go to him.
+This is a forked version from [eugeneware](https://github.com/alexeymasolov/docker-octobercms-nginx-ssh.git). All credits go to him.
 
 ## Installation
 
 ```
-$ git clone https://github.com/alexeymasolov/docker-octobercms-nginx-ssh.git
-$ cd docker-octobercms-nginx-ssh
-$ sudo docker build -t="docker-octobercms-nginx-ssh" .
+$ git clone https://github.com/stami-butzbach/docker-octobercms.git
+$ cd docker-octobercms
+$ sudo docker build -t="docker-octobercms" .
+```
+
+.. or with docker-composer
+
+```bash
+$ git clone https://github.com/stami-butzbach/docker-octobercms.git
+$ cd docker-octobercms
+$ sudo docker-composer up
 ```
 
 ## Usage
@@ -17,7 +25,7 @@ $ sudo docker build -t="docker-octobercms-nginx-ssh" .
 To spawn a new instance of octobercms with name **myoctober**:
 
 ```bash
-$ sudo docker run --name="myoctober" -p 80 -p 22 -d docker-octobercms-nginx-ssh
+$ sudo docker run --name="myoctober" -p 80 -p 22 -d docker-octobercms
 ```
 
 Use this name to check the port it's on:

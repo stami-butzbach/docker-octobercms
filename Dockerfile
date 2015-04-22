@@ -1,5 +1,11 @@
-FROM ubuntu:14.04
-MAINTAINER Alexey Masolov <alexey.masolov@gmail.com>
+FROM alexeymasolov/docker-octobercms-nginx-ssh
+
+# FROM ubuntu:14.04
+FROM debian:wheezy
+
+MAINTAINER Thorsten Buss <info@buss-networks.de>
+
+VOLUME	/var/www
 
 # Keep upstart from complaining
 RUN dpkg-divert --local --rename --add /sbin/initctl
@@ -11,21 +17,19 @@ RUN mkdir /var/run/sshd
 # Let the conatiner know that there is no tty
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update
 RUN ln -sf /proc/mounts /etc/mtab
-RUN apt-get -y upgrade
 
-# Basic Requirements
-RUN apt-get -y install mysql-server mysql-client nginx php5-fpm php5-mysql php-apc pwgen python-setuptools curl git unzip openssh-server openssl
-
-# OctoberCMS Requirements
-RUN apt-get -y install php5-curl php5-gd php5-mcrypt php5-memcache php5-memcached php5-sqlite php5-json libphp-pclzip
+RUN apt-get update && apt-get -y install \
+	# Basic Requirements
+	mysql-server mysql-client nginx php5-fpm php5-mysql php5-cli php-apc pwgen python-setuptools curl git unzip openssh-server openssl \
+	# OctoberCMS Requirements
+	php5-curl php5-gd php5-mcrypt php5-memcache php5-memcached php5-sqlite php5-json libphp-pclzip
 
 # Add october user for ssh access
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 RUN sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config
 RUN sed -ri 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
-RUN useradd -m -d /home/october -p $(openssl passwd -1 'temp') -G sudo -s /bin/bash october 
+RUN useradd -m -d /home/october -p $(openssl passwd -1 'saulus') -G sudo -s /bin/bash october 
 RUN echo "october ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 # mysql config
@@ -42,7 +46,7 @@ RUN sed -i -e "s/upload_max_filesize\s*=\s*2M/upload_max_filesize = 100M/g" /etc
 RUN sed -i -e "s/post_max_size\s*=\s*8M/post_max_size = 100M/g" /etc/php5/fpm/php.ini
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf
 RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php5/fpm/pool.d/www.conf
-RUN find /etc/php5/cli/conf.d/ -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \;
+
 RUN php5enmod mcrypt
 
 # nginx site conf
@@ -57,11 +61,8 @@ ADD ./supervisord.conf /etc/supervisord.conf
 RUN cd /usr/local/sbin/ && curl -sS https://getcomposer.org/installer | php && mv composer.phar composer
 
 # Install OctoberCMS
-RUN cd /usr/share/nginx/ && composer -n create-project october/october october dev-master
-RUN mv /usr/share/nginx/html/5* /usr/share/nginx/october
-RUN rm -rf /usr/share/nginx/html/
-RUN mv /usr/share/nginx/october /usr/share/nginx/html
-RUN chown -R www-data:www-data /usr/share/nginx/html
+RUN cd /var/www && composer -n create-project october/october . dev-master
+RUN chown www-data:www-data /var/www -R
 
 # Wordpress Initialization and Startup Script
 ADD ./start.sh /start.sh
