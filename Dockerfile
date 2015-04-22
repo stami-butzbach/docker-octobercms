@@ -21,7 +21,7 @@ RUN ln -sf /proc/mounts /etc/mtab
 
 RUN apt-get update && apt-get -y install \
 	# Basic Requirements
-	mysql-server mysql-client nginx php5-fpm php5-mysql php5-cli php-apc pwgen python-setuptools curl git unzip openssh-server openssl \
+	mysql-server mysql-client nginx php5-fpm php5-mysql php5-cli php-apc pwgen python-setuptools curl git unzip openssh-server openssl sudo \
 	# OctoberCMS Requirements
 	php5-curl php5-gd php5-mcrypt php5-memcache php5-memcached php5-sqlite php5-json libphp-pclzip
 
